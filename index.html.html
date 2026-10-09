@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MPI Organ Pencernaan Manusia</title>
+<style>
+:root{--bg:#f2f8f5;--card:#fff;--ink:#12302b;--mut:#4d6b65;--pri:#0f6b5c;--pri2:#d8efe8;--hi:#f2b63d;--ok:#1f8a4c;--bad:#c2394f;--line:#c9ddd6}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1f1c;--card:#16302b;--ink:#e8f4f0;--mut:#9dbab3;--pri:#4fc3a8;--pri2:#1f4a42;--line:#2c524a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 'Trebuchet MS','Segoe UI',sans-serif}
+header{background:var(--pri);color:#fff;padding:18px 20px}
+header h1{margin:0;font-size:1.35rem}
+header p{margin:2px 0 0;opacity:.9;font-size:.9rem}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav button{flex:0 0 auto;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:7px 12px;border-radius:20px;cursor:pointer;font:inherit;font-size:.85rem}
+nav button.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+nav button.done::after{content:" ✓"}
+main{max-width:860px;margin:0 auto;padding:18px 16px 60px}
+section{display:none}section.on{display:block}
+h2{margin:.2em 0 .5em;font-size:1.4rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:8px;padding:10px 18px;font:inherit;cursor:pointer;margin:4px 6px 4px 0}
+.btn.alt{background:var(--pri2);color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:default}
+button:focus-visible,textarea:focus-visible{outline:3px solid var(--hi);outline-offset:2px}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:10px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;cursor:pointer;font:inherit}
+.opt:hover{border-color:var(--pri)}
+.opt.sel{border-color:var(--pri);background:var(--pri2)}
+.opt.ok{border-color:var(--ok);background:#d9f2e2;color:#0d3b20}
+.opt.no{border-color:var(--bad);background:#fbe0e5;color:#5a1020}
+.fb{margin-top:8px;padding:8px 12px;border-left:4px solid var(--hi);background:var(--pri2);border-radius:4px;font-size:.92rem}
+.bar{height:8px;background:var(--line);border-radius:6px;margin:8px 0 14px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--hi);width:0;transition:width .3s}
+.grid{display:grid;grid-template-columns:150px 1fr;gap:14px}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.organs{display:flex;flex-direction:column;gap:6px}
+.organs button{padding:9px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;font:inherit;text-align:left}
+.organs button.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+@media(max-width:640px){.organs{flex-direction:row;flex-wrap:wrap}}
+.tag{display:inline-block;background:var(--hi);color:#3a2a00;border-radius:6px;padding:1px 8px;font-size:.8rem;margin:0 4px 4px 0}
+.track{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0}
+.node{padding:8px 10px;border-radius:20px;border:2px solid var(--line);font-size:.85rem;background:var(--card);transition:all .25s}
+.node.on{background:var(--hi);border-color:var(--hi);color:#3a2a00;font-weight:bold;transform:scale(1.08)}
+.node.past{background:var(--pri2);border-color:var(--pri)}
+.score{font-size:2rem;font-weight:bold;color:var(--pri)}
+textarea{width:100%;min-height:70px;border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;background:var(--bg);color:var(--ink)}
+.res{display:flex;gap:12px;flex-wrap:wrap}.res>div{flex:1;min-width:130px;text-align:center}
+@media print{nav,.btn,header p{display:none}section{display:block!important}}
+</style>
+</head>
+<body>
+<header><h1>Sistem Pencernaan Manusia</h1><p>Media Pembelajaran Interaktif · IPA SMP/MTs</p></header>
+<nav id="nav"></nav>
+<main>
+
+<section id="s0">
+<h2>Apersepsi</h2>
+<div class="card"><p>Pagi ini Rani sarapan nasi, telur, dan segelas susu. Dua jam kemudian, perutnya berbunyi dan ia merasa lapar lagi.</p>
+<p><b>Pikirkan dulu:</b> ke mana perginya sarapan Rani? Apa yang terjadi pada makanan itu setelah ditelan?</p></div>
+<div class="card"><p>Coba kunyah sepotong nasi putih selama 1 menit tanpa menelannya. Rasanya berubah menjadi sedikit manis. Mengapa?</p>
+<button class="btn alt" onclick="reveal('ap1')">Lihat petunjuk</button>
+<div id="ap1" class="fb" hidden>Di dalam mulut ada enzim amilase di air liur. Enzim ini mengubah amilum (pati) pada nasi menjadi gula sederhana yang terasa manis.</div></div>
+<div class="card"><b>Tujuan pembelajaran</b><ul>
+<li>Menyebutkan organ-organ pencernaan dan fungsinya.</li>
+<li>Menjelaskan proses pencernaan mekanis dan kimiawi.</li>
+<li>Menelusuri perjalanan makanan dari mulut sampai anus.</li></ul></div>
+<button class="btn" onclick="go(1)">Mulai asesmen awal</button>
+</section>
+
+<section id="s1"><h2>Asesmen Awal</h2><p>Ukur pengetahuan awalmu. Jawabanmu belum dikoreksi di sini, jadi jawab sejujurnya.</p><div id="q-awal"></div></section>
+
+<section id="s2">
+<h2>Materi Pokok</h2>
+<p>Pilih organ untuk melihat fungsinya. Buka semuanya untuk melanjutkan.</p>
+<div class="grid"><div class="organs" id="organs"></div><div class="card" id="organInfo" style="margin:0"></div></div>
+<div class="card"><b>Jenis pencernaan</b>
+<p><b>Mekanis:</b> makanan dihancurkan secara fisik, misalnya dikunyah gigi dan diremas otot lambung.</p>
+<p><b>Kimiawi:</b> makanan diuraikan oleh enzim. Karbohidrat menjadi glukosa, protein menjadi asam amino, lemak menjadi asam lemak dan gliserol.</p></div>
+<div class="card"><b>Gangguan pencernaan</b>
+<p><b>Maag (gastritis):</b> dinding lambung meradang. <b>Diare:</b> feses encer karena air tidak terserap. <b>Konstipasi:</b> feses keras dan sulit keluar, sering karena kurang serat dan air. <b>Apendisitis:</b> radang usus buntu.</p></div>
+<button class="btn" onclick="go(3)">Lanjut ke simulasi</button>
+</section>
+
+<section id="s3">
+<h2>Simulasi Perjalanan Makanan</h2>
+<p>Pilih makanan, lalu tekan "Lanjut" untuk mengikuti perjalanannya.</p>
+<div id="foods"></div>
+<div class="track" id="track"></div>
+<div class="card"><div id="simTxt">Pilih makanan terlebih dahulu.</div></div>
+<button class="btn" id="simNext" onclick="simStep()" disabled>Lanjut</button>
+<button class="btn alt" onclick="simReset()">Ulangi</button>
+<div class="card"><b>Pertanyaan pemantik:</b> mengapa usus halus berlipat-lipat dan memiliki jonjot (vili)? <button class="btn alt" onclick="reveal('sim1')">Jawaban</button>
+<div id="sim1" class="fb" hidden>Lipatan dan vili memperluas permukaan penyerapan, sehingga sari makanan lebih banyak masuk ke darah dan pembuluh limfa.</div></div>
+</section>
+
+<section id="s4"><h2>Kuis</h2><p>Setiap jawaban langsung dikoreksi dan dijelaskan.</p><div id="q-kuis"></div></section>
+
+<section id="s5"><h2>Asesmen Akhir</h2><p>Jawab soal berikut untuk melihat perkembanganmu.</p><div id="q-akhir"></div></section>
+
+<section id="s6">
+<h2>Refleksi</h2>
+<div class="card" id="hasil"></div>
+<div class="card"><label for="r1"><b>1. Hal baru apa yang paling kamu pahami hari ini?</b></label><textarea id="r1"></textarea></div>
+<div class="card"><label for="r2"><b>2. Bagian mana yang masih sulit dan perlu kamu pelajari lagi?</b></label><textarea id="r2"></textarea></div>
+<div class="card"><label for="r3"><b>3. Kebiasaan makan apa yang akan kamu ubah agar pencernaanmu sehat?</b></label><textarea id="r3"></textarea></div>
+<div class="card"><b>Seberapa paham kamu sekarang?</b><div id="lvl"></div></div>
+<button class="btn" onclick="window.print()">Cetak / simpan sebagai PDF</button>
+<button class="btn alt" onclick="location.reload()">Ulangi dari awal</button>
+</section>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const reveal=id=>{$(id).hidden=false};
+const names=["Apersepsi","Asesmen Awal","Materi","Simulasi","Kuis","Asesmen Akhir","Refleksi"];
+let cur=0;const done=new Set();
+const nav=$("nav");
+names.forEach((n,i)=>{const b=document.createElement("button");b.textContent=n;b.onclick=()=>go(i);nav.appendChild(b)});
+function go(i){
+  done.add(cur);cur=i;
+  document.querySelectorAll("section").forEach((s,k)=>s.classList.toggle("on",k===i));
+  [...nav.children].forEach((b,k)=>{b.classList.toggle("on",k===i);b.classList.toggle("done",done.has(k)&&k!==i)});
+  if(i===6)hasil();
+  window.scrollTo({top:0})
+}
+
+/* Bank soal: [pertanyaan, [opsi], indeks benar, penjelasan] */
+const AWAL=[
+["Organ yang pertama kali dilewati makanan adalah...",["Lambung","Mulut","Usus halus","Kerongkongan"],1,"Pencernaan dimulai di mulut."],
+["Enzim amilase pada air liur mencerna...",["Protein","Lemak","Karbohidrat","Vitamin"],2,"Amilase mengubah amilum menjadi gula sederhana."],
+["Penyerapan sari makanan terutama terjadi di...",["Lambung","Usus besar","Usus halus","Kerongkongan"],2,"Usus halus memiliki vili yang luas."],
+["Gerakan peristaltik adalah...",["Gerak mengunyah","Gerak meremas otot saluran cerna","Gerak menelan udara","Gerak menyerap air"],1,"Peristaltik mendorong makanan sepanjang saluran."],
+["Sisa makanan yang tidak tercerna dikeluarkan lewat...",["Ginjal","Paru-paru","Anus","Kulit"],2,"Feses dikeluarkan melalui anus."]];
+const KUIS=[
+["Cairan empedu dihasilkan oleh...",["Pankreas","Hati","Lambung","Kantung kemih"],1,"Hati menghasilkan empedu, disimpan di kantung empedu. Fungsinya mengemulsi lemak."],
+["Asam klorida (HCl) di lambung berfungsi untuk...",["Mencerna lemak","Mematikan kuman dan mengaktifkan pepsin","Menyerap air","Menghasilkan insulin"],1,"HCl menciptakan suasana asam, membunuh bakteri, dan mengaktifkan pepsin."],
+["Enzim pepsin mengubah...",["Protein menjadi peptida","Amilum menjadi glukosa","Lemak menjadi asam lemak","Selulosa menjadi gula"],0,"Pepsin bekerja pada protein di lambung."],
+["Fungsi utama usus besar adalah...",["Menyerap air dan membentuk feses","Menghasilkan empedu","Mencerna protein","Menelan makanan"],0,"Usus besar menyerap air dan membusukkan sisa makanan menjadi feses."],
+["Urutan organ yang benar adalah...",["Mulut, lambung, kerongkongan, usus halus","Mulut, kerongkongan, lambung, usus halus","Mulut, usus halus, lambung, usus besar","Kerongkongan, mulut, lambung, anus"],1,"Mulut, kerongkongan, lambung, usus halus, usus besar, anus."]];
+const AKHIR=[
+["Organ yang BUKAN bagian saluran pencernaan adalah...",["Kerongkongan","Lambung","Hati","Usus besar"],2,"Hati termasuk kelenjar pencernaan, bukan saluran."],
+["Pankreas menghasilkan...",["Empedu","Enzim tripsin, amilase, dan lipase","Asam lambung","Air liur"],1,"Getah pankreas mencerna karbohidrat, protein, dan lemak."],
+["Vili pada usus halus berfungsi untuk...",["Memperluas bidang penyerapan","Menghancurkan makanan","Menyimpan feses","Menghasilkan HCl"],0,"Vili memperluas permukaan sehingga penyerapan efisien."],
+["Mengunyah makanan sampai halus termasuk pencernaan...",["Kimiawi","Mekanis","Penyerapan","Ekskresi"],1,"Mengunyah adalah perubahan fisik tanpa enzim."],
+["Orang yang kurang makan serat dan air berisiko mengalami...",["Diare","Konstipasi","Apendisitis","Maag"],1,"Kurang serat dan air membuat feses keras."],
+["Hasil akhir pencernaan protein adalah...",["Glukosa","Asam amino","Asam lemak","Gliserol"],1,"Protein dipecah menjadi asam amino."]];
+
+const skor={awal:null,kuis:null,akhir:null};
+function quiz(id,data,key,instant){
+  const box=$(id);let ans=new Array(data.length).fill(-1),n=0;
+  box.innerHTML='<div class="bar"><i></i></div>';
+  data.forEach((q,i)=>{
+    const c=document.createElement("div");c.className="card";
+    c.innerHTML=`<b>${i+1}. ${q[0]}</b>`;
+    q[1].forEach((o,j)=>{
+      const b=document.createElement("button");b.className="opt";b.textContent=o;
+      b.onclick=()=>{
+        if(instant&&ans[i]>-1)return;
+        if(ans[i]===-1)n++;
+        ans[i]=j;
+        [...c.querySelectorAll(".opt")].forEach((x,k)=>{x.classList.toggle("sel",!instant&&k===j);
+          if(instant){x.classList.toggle("ok",k===q[2]);x.classList.toggle("no",k===j&&j!==q[2])}});
+        if(instant){const f=document.createElement("div");f.className="fb";f.textContent=(j===q[2]?"Benar. ":"Belum tepat. ")+q[3];c.appendChild(f)}
+        box.querySelector(".bar i").style.width=(n/data.length*100)+"%";
+        fin.disabled=n<data.length
+      };c.appendChild(b)});
+    box.appendChild(c)});
+  const fin=document.createElement("button");fin.className="btn";fin.disabled=true;
+  fin.textContent=key==="awal"?"Selesai, lanjut ke materi":key==="kuis"?"Lihat skor kuis":"Lihat hasil akhir";
+  const out=document.createElement("div");
+  fin.onclick=()=>{
+    const s=ans.filter((a,i)=>a===data[i][2]).length;skor[key]=Math.round(s/data.length*100);
+    fin.disabled=true;
+    if(key==="awal"){go(2)}
+    else{out.className="card";out.innerHTML=`<div class="score">${skor[key]}</div><p>${s} dari ${data.length} soal benar.</p>`;
+      const nx=document.createElement("button");nx.className="btn";nx.textContent=key==="kuis"?"Lanjut ke asesmen akhir":"Lanjut ke refleksi";nx.onclick=()=>go(key==="kuis"?5:6);out.appendChild(nx)}
+  };
+  box.append(fin,out)
+}
+quiz("q-awal",AWAL,"awal",false);quiz("q-kuis",KUIS,"kuis",true);quiz("q-akhir",AKHIR,"akhir",false);
+
+/* Materi */
+const ORG=[
+["Mulut","Saluran","Gigi memotong dan menggiling (mekanis). Lidah mencampur makanan dengan air liur. Amilase mengubah amilum menjadi maltosa (kimiawi).","Amilase"],
+["Kerongkongan","Saluran","Saluran otot sepanjang ± 25 cm. Gerak peristaltik mendorong makanan ke lambung. Tidak terjadi pencernaan di sini.","—"],
+["Lambung","Saluran","Otot meremas makanan menjadi bubur (kimus). Getah lambung berisi HCl dan pepsin yang mencerna protein, serta lendir pelindung dinding lambung.","Pepsin, HCl"],
+["Usus halus","Saluran","Panjang ± 6–7 m: duodenum, jejunum, ileum. Pencernaan kimiawi tuntas dan sari makanan diserap lewat vili ke darah dan limfa.","Tripsin, lipase, amilase, maltase"],
+["Usus besar","Saluran","Menyerap air dan mineral, lalu membentuk feses. Bakteri baik (E. coli) membantu membuat vitamin K.","—"],
+["Anus","Saluran","Lubang akhir. Otot sfingter mengatur pengeluaran feses (defekasi).","—"],
+["Hati","Kelenjar","Kelenjar terbesar. Menghasilkan empedu untuk mengemulsi lemak, menyimpan glikogen, dan menetralkan racun.","Empedu"],
+["Pankreas","Kelenjar","Menghasilkan getah pankreas ke duodenum, dan hormon insulin untuk mengatur gula darah.","Tripsin, amilase, lipase"]];
+const seen=new Set();
+ORG.forEach((o,i)=>{const b=document.createElement("button");b.textContent=o[0];b.onclick=()=>{
+  seen.add(i);[...$("organs").children].forEach((x,k)=>x.classList.toggle("on",k===i));
+  $("organInfo").innerHTML=`<h3 style="margin-top:0">${o[0]}</h3><span class="tag">${o[1]}</span><p>${o[2]}</p><p><b>Enzim/zat:</b> ${o[3]}</p><p style="color:var(--mut);font-size:.85rem">Dibuka ${seen.size} dari ${ORG.length} organ</p>`};
+  $("organs").appendChild(b)});
+$("organInfo").innerHTML="<p>Pilih sebuah organ di samping.</p>";
+
+/* Simulasi */
+const TR=["Mulut","Kerongkongan","Lambung","Usus halus","Usus besar","Anus"];
+const FOOD={
+"Nasi (karbohidrat)":["Dikunyah, amilase memecah amilum menjadi maltosa.","Didorong peristaltik. Tidak ada pencernaan kimiawi.","Diremas jadi kimus. Karbohidrat belum dicerna di sini.","Amilase dan maltase mengubahnya menjadi glukosa, lalu diserap ke darah.","Serat yang tersisa dan air diproses. Air diserap kembali.","Sisa dikeluarkan sebagai feses."],
+"Telur (protein)":["Dikunyah menjadi lebih kecil. Belum dicerna kimiawi.","Didorong peristaltik menuju lambung.","HCl dan pepsin memecah protein menjadi peptida.","Tripsin mengubah peptida menjadi asam amino, lalu diserap ke darah.","Sisa yang tak tercerna dan air diproses.","Sisa dikeluarkan sebagai feses."],
+"Gorengan (lemak)":["Dikunyah dan dicampur air liur. Lemak belum dicerna.","Didorong peristaltik menuju lambung.","Lemak hampir tidak dicerna di lambung dan meninggalkannya lebih lambat.","Empedu mengemulsi lemak, lipase mengubahnya menjadi asam lemak dan gliserol, lalu diserap limfa.","Air diserap, sisa membentuk feses.","Sisa dikeluarkan sebagai feses."]};
+let food=null,st=-1;
+Object.keys(FOOD).forEach(f=>{const b=document.createElement("button");b.className="btn alt";b.textContent=f;b.onclick=()=>{food=f;simReset(true);[...$("foods").children].forEach(x=>x.style.outline=x===b?"3px solid var(--hi)":"none")};$("foods").appendChild(b)});
+function draw(){$("track").innerHTML=TR.map((t,i)=>`<span class="node ${i===st?"on":i<st?"past":""}">${t}</span>`).join("→")}
+function simReset(keep){st=-1;draw();$("simNext").disabled=!food;$("simNext").textContent="Lanjut";$("simTxt").textContent=food?`Siap menelusuri: ${food}. Tekan "Lanjut".`:"Pilih makanan terlebih dahulu."}
+function simStep(){st++;draw();$("simTxt").innerHTML=`<b>${TR[st]}:</b> ${FOOD[food][st]}`;if(st===TR.length-1){$("simNext").disabled=true}}
+draw();
+
+/* Refleksi */
+function hasil(){
+  const f=v=>v===null?"belum dikerjakan":v;
+  let sel="";if(skor.awal!==null&&skor.akhir!==null){const d=skor.akhir-skor.awal;sel=`<p>${d>0?"Skormu naik "+d+" poin dari asesmen awal. Kerja bagus.":d===0?"Skormu sama dengan asesmen awal. Ulangi materi dan simulasi.":"Skormu turun dari asesmen awal. Pelajari kembali materi, lalu coba lagi."}</p>`}
+  $("hasil").innerHTML=`<b>Perkembanganmu</b><div class="res"><div><div class="score">${f(skor.awal)}</div>Asesmen awal</div><div><div class="score">${f(skor.kuis)}</div>Kuis</div><div><div class="score">${f(skor.akhir)}</div>Asesmen akhir</div></div>${sel}`}
+$("lvl").innerHTML=["Belum paham","Cukup paham","Paham","Sangat paham"].map(t=>`<label style="margin-right:12px;display:inline-block"><input type="radio" name="lv"> ${t}</label>`).join("");
+go(0);
+</script>
+</body>
+</html>
